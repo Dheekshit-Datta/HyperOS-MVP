@@ -19,7 +19,7 @@ class HyperOSAgent:
         # Initialize Gemini
         gemini_key = os.getenv("GEMINI_API_KEY")
         if not gemini_key:
-            print("WARNING: GEMINI_API_KEY not found in .env")
+            raise ValueError("CRITICAL: GEMINI_API_KEY not found in environment variables. Please set it in .env file.")
         genai.configure(api_key=gemini_key)
         
         # We can use gemini-1.5-pro or gemini-1.5-flash
@@ -46,10 +46,19 @@ class HyperOSAgent:
         Gemini analyzes, plans, and tells us what action to execute next
         """
         
+        # safely try to get window context
+        active_window_title = "Unknown"
+        try:
+            from tools.window_manager import WindowManager
+            active_window_title = WindowManager.get_active_window_title()
+        except Exception:
+            pass
+
         system_instructions = f"""
         You are HyperOS AI, a desktop automation agent. 
         Current System: {self.os_type}
         Screen Resolution: {self.screen_size}
+        Active Window Focus: {active_window_title}
         
         Follow this 3-step cycle for every task: ANALYZE screen → PLAN actions → EXECUTE task.
         
@@ -78,6 +87,7 @@ class HyperOSAgent:
 
         prompt = f"""
         User Task: {user_task}
+        Active Window: {active_window_title}
         Previous Actions: {json.dumps(self.history[-5:])}
         
         Analyze the attached screenshot and determine the NEXT action as per the instructions.

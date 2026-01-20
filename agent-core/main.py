@@ -20,7 +20,11 @@ app.add_middleware(
 
 @app.get("/")
 def read_root():
-    return {"status": "HyperOS Agent Active", "system": agent.get_system_status()}
+    return {
+        "status": "HyperOS Agent Active", 
+        "version": "1.0.1",
+        "system": agent.get_system_status()
+    }
 
 @app.post("/execute")
 def execute_command(req: CommandRequest):
