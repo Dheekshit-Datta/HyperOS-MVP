@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+pyautogui
+mistralai
+pillow
+python-dotenv
+opencv-python
+numpy
