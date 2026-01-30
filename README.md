@@ -1,94 +1,354 @@
-# HyperOS-MVP 🚀
+# HyperOS - Vision-Enabled AI Desktop Agent
 
-**HyperOS-MVP** is an autonomous AI desktop agent designed to perform complex tasks by interacting with your computer exactly like a human would. It uses a sophisticated **ANALYZE → PLAN → EXECUTE** loop powered by **Google Gemini 1.5 Flash**.
+<div align="center">
 
-## 🧠 Core Architecture: The 3-Step Cycle
+![HyperOS Logo](docs/assets/logo-placeholder.png)
 
-HyperOS doesn't just "guess" what to do next. It follows a strict cognitive loop for every single action:
+**The "Iron Man JARVIS" for your desktop** - An AI agent that sees your screen and automates tasks through natural language.
 
-1.  **ANALYZE (Vision Context)**:
-    *   Captures a real-time screenshot of your desktop.
-    *   Uses Gemini's multimodal capabilities to identify UI elements (buttons, text fields, icons).
-    *   Understands the current system state (which windows are open, what's focused).
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![Node.js 18+](https://img.shields.io/badge/node-18+-green.svg)](https://nodejs.org/)
+[![Electron](https://img.shields.io/badge/electron-28-9cf.svg)](https://www.electronjs.org/)
 
-2.  **PLAN (Strategy & Logic)**:
-    *   Breaks down the user's high-level task into micro-steps.
-    *   Reasoning is attached to every planned action (e.g., "I need to click the Start button to find Notepad").
-    *   Dynamically adapts if an unexpected window pops up or an action fails.
-
-3.  **EXECUTE (Physical Automation)**:
-    *   Translates AI plans into real system commands.
-    *   Uses **PyAutoGUI** to physically move the mouse, click elements, and type text.
-    *   Includes safety delays to ensure the OS has time to process the inputs.
+</div>
 
 ---
 
-## ✨ Features
+## 🚀 What is HyperOS?
 
-*   **Autonomous Operation**: Give it a task like "Open Chrome and find the latest AI news," and watch it work.
-*   **Gemini 1.5 Flash Integration**: Ultra-fast vision and reasoning.
-*   **Premium Glassmorphic UI**: A futuristic, always-on-top Electron overlay that visualizes the agent's internal thought process.
-*   **Real-time Visualization**: See exactly what the AI is "Thinking," "Planning," and "Doing" with color-coded step tracking.
-*   **Global Hotkey**: Press `Ctrl+Space` to quickly summon or hide the agent.
+HyperOS is a **vision-enabled desktop AI agent** that:
 
-## 🛠️ Technology Stack
+- 👁️ **Sees** - Captures and analyzes your screen using Gemini 1.5 Flash Vision AI
+- 🧠 **Thinks** - Plans multi-step workflows to complete your tasks  
+- 🎯 **Acts** - Executes mouse clicks, keyboard inputs, and application control
 
-*   **AI Engine**: Google Gemini 1.5 Flash
-*   **Backend**: Python (FastAPI)
-*   **Frontend**: React, TailwindCSS, Lucide-Icons
-*   **Runtime**: Electron (for the sleek desktop overlay)
-*   **Automation**: PyAutoGUI
+Unlike chatbots trapped in a browser, HyperOS operates as a transparent overlay on your desktop, automating real work across any application.
 
 ---
 
-## 🚀 Getting Started
+## 📸 Screenshots
 
-### Prerequisites
-*   Python 3.10+
-*   Node.js & npm
-*   Google Gemini API Key (from [AI Studio](https://aistudio.google.com/))
+> Add screenshots here after running the application:
+> - `docs/assets/screenshot-idle.png` - Main overlay interface
+> - `docs/assets/screenshot-executing.png` - Agent executing a task
+> - `docs/assets/screenshot-steps.png` - Step visualization
 
-### Installation
-1.  **Clone the Repository**:
-    ```bash
-    git clone https://github.com/YOUR_USERNAME/HyperOS-MVP.git
-    cd HyperOS-MVP
-    ```
-2.  **Set Up API Key**:
-    *   Navigate to `agent-core/`
-    *   Create a `.env` file and add:
-        ```env
-        GEMINI_API_KEY=your_gemini_api_key_here
-        ```
-3.  **Install Dependencies**:
-    ```bash
-    # For the agent core
-    cd agent-core
-    pip install -r requirements.txt
-    
-    # For the UI
-    cd ..
-    npm install
-    ```
+---
 
-### Running HyperOS
-Simply run the boot script in the root directory:
-```powershell
-./start.bat
+## 🏗️ Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                        HyperOS Architecture                          │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  ┌──────────────────┐    ┌──────────────────┐    ┌───────────────┐ │
+│  │   User Input     │───▶│  Electron Shell  │───▶│  React UI     │ │
+│  │  (Ctrl+Space)    │    │  (Transparent)   │    │  (Overlay)    │ │
+│  └──────────────────┘    └──────────────────┘    └───────┬───────┘ │
+│                                                          │          │
+│                                                          ▼          │
+│                                               ┌──────────────────┐  │
+│                                               │  FastAPI Server  │  │
+│                                               │   (Port 8000)    │  │
+│                                               └────────┬─────────┘  │
+│                                                        │            │
+│                          ┌─────────────────────────────┼──────────┐ │
+│                          │                             │          │ │
+│                          ▼                             ▼          │ │
+│               ┌──────────────────┐          ┌──────────────────┐  │ │
+│               │  Screen Capture  │          │  Gemini 1.5 AI   │  │ │
+│               │   (pyautogui)    │─────────▶│  Vision Analysis │  │ │
+│               └──────────────────┘          └────────┬─────────┘  │ │
+│                                                      │            │ │
+│                                                      ▼            │ │
+│                                           ┌──────────────────┐    │ │
+│                                           │  Action Engine   │    │ │
+│                                           │  (Mouse/Keyboard)│    │ │
+│                                           └──────────────────┘    │ │
+│                          └────────────────────────────────────────┘ │
+│                                    Python Agent Core                 │
+└─────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 📂 Project Structure
+## ⚡ Quick Start
 
-*   `agent-core/`: The Python logic, AI model integration, and automation engine.
-*   `electron/`: Main and preload scripts for the transparent overlay window.
-*   `src/`: React frontend source code for the premium UI.
-*   `start.bat`: One-click startup script for both backend and frontend.
+### Prerequisites
+
+- **Python 3.11+** - [Download](https://python.org/downloads)
+- **Node.js 18+** - [Download](https://nodejs.org)
+- **Gemini API Key** - [Get Free Key](https://makersuite.google.com/app/apikey)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/HyperOS-MVP.git
+   cd HyperOS-MVP
+   ```
+
+2. **Configure your API key**
+   ```bash
+   # Copy the example config
+   cp agent-core/.env.example agent-core/.env
+   
+   # Edit and add your Gemini API key
+   # GEMINI_API_KEY=your_key_here
+   ```
+
+3. **Start HyperOS**
+   
+   **Windows:**
+   ```batch
+   start.bat
+   ```
+   
+   **Linux/macOS:**
+   ```bash
+   chmod +x start.sh
+   ./start.sh
+   ```
+
+4. **Use the overlay**
+   - Press `Ctrl+Space` to toggle the overlay
+   - Type a task like "Open Notepad and type Hello World"
+   - Watch the AI analyze, plan, and execute!
 
 ---
 
-## 🛡️ Safety Note
-This agent has the power to control your mouse and keyboard. Always supervise the agent during task execution. You can stop the process anytime by closing the terminal or using the `Ctrl+C` command.
+## 🎮 Usage
 
-*Developed by Antigravity (Advanced Agentic AI)*
+### Global Hotkey
+
+| Shortcut | Action |
+|----------|--------|
+| `Ctrl+Space` | Toggle overlay visibility |
+
+### Example Tasks
+
+```
+"Open Chrome and search for weather"
+"Open Calculator and compute 25 * 17"
+"Open Notepad and type a poem about AI"
+"Click the Start button"
+"Press Alt+Tab to switch windows"
+```
+
+### Available Actions
+
+The AI can perform these actions:
+
+| Action | Description | Example |
+|--------|-------------|---------|
+| `click` | Click at coordinates | `click(500, 300)` |
+| `type` | Type text | `type("Hello World")` |
+| `press_key` | Press keyboard key | `press_key("enter")` |
+| `wait` | Wait for UI | `wait(2)` |
+| `done` | Mark task complete | `done("Task finished")` |
+
+---
+
+## 🛠️ Development
+
+### Manual Setup
+
+**Backend:**
+```bash
+cd agent-core
+python -m venv venv
+
+# Windows
+venv\Scripts\activate
+# Linux/macOS
+source venv/bin/activate
+
+pip install -r requirements.txt
+python main.py
+```
+
+**Frontend:**
+```bash
+npm install
+npm run dev
+```
+
+### Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start Vite dev server |
+| `npm run electron:dev` | Start with Electron |
+| `npm run build` | Build for production |
+| `npm run electron:build` | Build Electron app |
+
+### Running Tests
+
+```bash
+# Python tests
+cd agent-core
+python -m pytest tests/ -v
+
+# TypeScript type checking
+npm run typecheck
+```
+
+---
+
+## 📁 Project Structure
+
+```
+HyperOS-MVP/
+├── agent-core/              # 🐍 Python backend
+│   ├── agent.py             # Main HyperOSAgent class
+│   ├── main.py              # FastAPI server
+│   ├── requirements.txt     # Python dependencies
+│   ├── .env                 # Configuration (create from .env.example)
+│   ├── tools/
+│   │   └── window_manager.py
+│   └── tests/
+│       └── test_agent_core.py
+│
+├── electron/                # ⚡ Electron shell
+│   ├── main.ts              # Main process
+│   ├── preload.ts           # IPC bridge
+│   └── tsconfig.json
+│
+├── src/                     # ⚛️ React frontend
+│   ├── App.tsx              # Main UI component
+│   ├── main.tsx             # Entry point
+│   ├── index.css            # TailwindCSS styles
+│   └── vite-env.d.ts
+│
+├── docs/                    # 📚 Documentation
+│   ├── API.md               # API reference
+│   └── ARCHITECTURE.md      # System design
+│
+├── package.json             # Node dependencies
+├── vite.config.ts           # Vite configuration
+├── tailwind.config.js       # Tailwind customization
+├── electron-builder.yml     # Build configuration
+├── start.bat                # Windows launcher
+├── start.sh                 # Linux/macOS launcher
+└── README.md                # You are here!
+```
+
+---
+
+## 🔧 Configuration
+
+### Environment Variables
+
+Create `agent-core/.env` with:
+
+```env
+# Required: Your Gemini API key
+GEMINI_API_KEY=your_gemini_api_key_here
+
+# Optional: Backend port (default: 8000)
+# PORT=8000
+```
+
+### Customization
+
+- **UI Position**: Edit `src/App.tsx` - modify `right-6 top-1/2` classes
+- **Max Steps**: Edit `agent-core/agent.py` - change `MAX_STEPS = 20`
+- **Step Delay**: Edit `agent-core/agent.py` - change `STEP_DELAY = 1.0`
+
+---
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+| Problem | Solution |
+|---------|----------|
+| "GEMINI_API_KEY not found" | Create `.env` file in `agent-core/` with your API key |
+| Backend won't start | Check if port 8000 is in use: `netstat -ano \| findstr 8000` |
+| Overlay not appearing | Press `Ctrl+Space` - check if Electron started |
+| Clicks are inaccurate | Gemini may hallucinate coordinates - try simpler tasks |
+| Python not found | Ensure Python is in PATH: `python --version` |
+| npm install fails | Delete `node_modules/` and `package-lock.json`, retry |
+
+### Debug Mode
+
+Enable verbose logging:
+
+```python
+# In agent-core/agent.py, change:
+logging.basicConfig(level=logging.DEBUG, ...)
+```
+
+### Check Backend Health
+
+```bash
+curl http://127.0.0.1:8000/
+# Should return: {"status": "HyperOS Agent Active", ...}
+```
+
+---
+
+## 🔒 Security Considerations
+
+> ⚠️ **Warning**: HyperOS can execute arbitrary mouse/keyboard actions on your system.
+
+- Never run HyperOS with untrusted tasks
+- The agent can see sensitive information on screen
+- API keys are stored locally in `.env` (gitignored)
+- No data is logged to external servers
+
+---
+
+## 🗺️ Roadmap
+
+### v1.1 (Current)
+- ✅ Gemini 1.5 Flash vision integration
+- ✅ Basic action execution (click, type, press_key)
+- ✅ Transparent Electron overlay
+- ✅ Cancel task support
+
+### v2.0 (Planned)
+- ⬜ Windows UI Automation (pywinauto) for reliable clicking
+- ⬜ Local RAG with ChromaDB for document context
+- ⬜ Voice input support
+- ⬜ Multi-monitor support
+- ⬜ Persistent memory between sessions
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙏 Acknowledgments
+
+- [Google Gemini](https://deepmind.google/technologies/gemini/) for vision AI
+- [Electron](https://www.electronjs.org/) for desktop shell
+- [FastAPI](https://fastapi.tiangolo.com/) for backend framework
+- [PyAutoGUI](https://pyautogui.readthedocs.io/) for automation
+
+---
+
+<div align="center">
+
+**Built with ❤️ by Antigravity**
+
+[Report Bug](https://github.com/yourusername/HyperOS-MVP/issues) · [Request Feature](https://github.com/yourusername/HyperOS-MVP/issues)
+
+</div>

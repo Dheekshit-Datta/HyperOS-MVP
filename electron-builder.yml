@@ -1,0 +1,95 @@
+# HyperOS Electron Builder Configuration
+# Documentation: https://www.electron.build/configuration
+
+appId: com.hyperos.desktop
+productName: HyperOS
+copyright: Copyright © 2026 Antigravity
+
+# Directories
+directories:
+  output: release
+  buildResources: public
+
+# Files to include
+files:
+  - dist/**/*
+  - dist-electron/**/*
+  - public/**/*
+  - "!**/*.ts"
+  - "!**/*.map"
+  - "!**/node_modules/**/{test,tests,__tests__}/**"
+  - "!**/node_modules/**/*.md"
+
+# Compression
+compression: maximum
+removePackageScripts: true
+
+# Windows configuration
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  icon: public/icon.ico
+  artifactName: "${productName}-Setup-${version}.${ext}"
+
+# NSIS installer configuration
+nsis:
+  oneClick: true
+  perMachine: false
+  allowToChangeInstallationDirectory: false
+  deleteAppDataOnUninstall: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: HyperOS
+  runAfterFinish: true
+  installerIcon: public/icon.ico
+  uninstallerIcon: public/icon.ico
+  installerHeaderIcon: public/icon.ico
+  license: LICENSE
+
+# macOS configuration (for future)
+mac:
+  target:
+    - target: dmg
+      arch:
+        - x64
+        - arm64
+  icon: public/icon.icns
+  category: public.app-category.productivity
+  artifactName: "${productName}-${version}-${arch}.${ext}"
+
+# DMG configuration
+dmg:
+  contents:
+    - x: 130
+      y: 220
+    - x: 410
+      y: 220
+      type: link
+      path: /Applications
+
+# Linux configuration (for future)
+linux:
+  target:
+    - target: AppImage
+      arch:
+        - x64
+  icon: public/icon.png
+  category: Utility
+  artifactName: "${productName}-${version}.${ext}"
+
+# Auto-update configuration (for future)
+publish:
+  provider: github
+  owner: your-github-username
+  repo: hyperos
+
+# Extra resources
+extraResources:
+  - from: agent-core/
+    to: agent-core/
+    filter:
+      - "**/*.py"
+      - "**/*.txt"
+      - "**/*.example"

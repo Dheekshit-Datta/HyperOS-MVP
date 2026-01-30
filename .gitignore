@@ -1,7 +1,79 @@
-node_modules
-dist
-dist-electron
-.DS_Store
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+dist-electron/
+release/
+build/
+*.exe
+*.dmg
+*.AppImage
+
+# Python
+agent-core/venv/
+agent-core/__pycache__/
+agent-core/**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.eggs/
+*.egg
+
+# Environment files
 .env
-__pycache__
-agent-core/venv
+.env.local
+.env.*.local
+agent-core/.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Vite
+.vite/
+
+# Electron
+electron/dist/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Test coverage
+coverage/
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Lock files (optional - uncomment if you want to commit them)
+# package-lock.json
+# pnpm-lock.yaml
+
+# Downloaded binaries
+electron_binary.zip
+*.zip
+
+# Native app logs
+native_app.log
+boot.log
