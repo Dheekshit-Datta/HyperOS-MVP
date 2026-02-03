@@ -133,13 +133,15 @@ class HyperOSAgent:
         """STEP 3: EXECUTE (Human-like Fluidity)"""
         action_type = action.get('type')
         target = action.get('target', 'N/A')
-        print(f"HUMAN-ACTION: {action_type} on {target}")
+        print(f"⚡ EXECUTING: {action_type} on {target}")
         
         try:
             if 'coords_1000' in action:
                 # Convert grid coords to actual pixels
                 x = int(action['coords_1000'][0] * self.screen_size.width / 1000)
                 y = int(action['coords_1000'][1] * self.screen_size.height / 1000)
+                
+                print(f"   Moving mouse to ({x}, {y}) for {action_type}")
                 
                 # Randomized human-like movement speed (0.3s to 0.7s)
                 import random
@@ -160,33 +162,42 @@ class HyperOSAgent:
                     pyautogui.scroll(clicks)
             
             elif action_type == 'press_key':
+                print(f"   Pressing key: {action.get('key')}")
                 pyautogui.press(action.get('key'))
             elif action_type == 'wait':
-                time.sleep(action.get('duration', 1.5))
+                duration = action.get('duration', 1.5)
+                print(f"   Waiting for {duration} seconds...")
+                time.sleep(duration)
             
-            time.sleep(1.5)
-            return False
+            time.sleep(1.0)
+            return True # Fixed return value
         except Exception as e:
-            print(f"Action failed: {e}")
+            print(f"❌ Action failed: {e}")
             return False
 
     def run_cycle(self, user_task: str, history: list = None):
         """Perform ONE cycle: Analyze → Plan → Execute → Verify"""
+        print(f"\n--- CYCLE START (Task: {user_task}) ---")
         if history is not None:
             self.history = history
         
         # 1. ANALYZE & PLAN
+        print("📸 Capturing screenshot and asking AI...")
         screenshot = self.capture_screen()
         decision = self.ai_model_analyze_plan_execute(user_task, screenshot)
         
         if not decision:
+            print("❌ AI decision failed")
             return {"status": "error", "message": "Failed to get decision from AI"}
         
         analysis = decision.get('screen_analysis', {})
         next_action = decision.get('next_action', {})
         
+        print(f"🧠 AI Reasoning: {next_action.get('reasoning', 'N/A')}")
+        
         # Check for early completion
         if next_action['type'] == 'done':
+            print("✅ Task marked as DONE by AI")
             return {
                 "status": "complete",
                 "analysis": analysis,
@@ -195,9 +206,10 @@ class HyperOSAgent:
             }
         
         # 3. EXECUTE
-        self.execute_action(next_action)
+        success = self.execute_action(next_action)
         
         # 4. VERIFY
+        print("🔍 Verifying action outcome...")
         verify_screenshot = self.capture_screen()
         verification = self.ai_model_analyze_plan_execute(
             user_task, 
@@ -206,6 +218,7 @@ class HyperOSAgent:
             last_action=next_action
         )
         
+        print("--- CYCLE END ---\n")
         return {
             "status": "success",
             "analysis": analysis,
@@ -213,21 +226,18 @@ class HyperOSAgent:
             "verification": verification
         }
 
+    def execute_instruction(self, instruction: str):
+        """Main entry point for instructions"""
+        print(f"🚀 HyperOS Instruction: {instruction}")
+        return self.run_task(instruction)
+
     def run_task(self, user_task):
-        """COMPLETE ANALYZE-PLAN-EXECUTE LOOP (Synchronous for API compatibility)"""
-        print(f"🚀 Starting HyperOS Autonomous Agent (Mistral Pixtral)")
+        """COMPLETE ANALYZE-PLAN-EXECUTE LOOP"""
         self.history = []
-        # ... logic as before or simplified
         for i in range(20):
             res = self.run_cycle(user_task)
             if res['status'] in ['complete', 'error']:
-                break
-        return {"status": "success", "history": self.history}
-
-                
+                return res
         return {"status": "timeout", "message": "Maximum steps reached"}
-
-    def execute_instruction(self, instruction: str):
-        return self.run_task(instruction)
 
 agent = HyperOSAgent()
