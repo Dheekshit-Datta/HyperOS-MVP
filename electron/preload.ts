@@ -100,7 +100,7 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
     /**
      * Set ignore mouse events (legacy API)
      */
-    setIgnoreMouseEvents: (ignore: boolean, options?: { forward: boolean }): void => {
+    setIgnoreMouseEvents: (ignore: boolean, _options?: { forward: boolean }): void => {
         ipcRenderer.send('set-click-through', ignore);
     },
 
@@ -110,7 +110,7 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
     on: (channel: string, callback: (...args: any[]) => void) => {
         const validChannels = ['window-visibility-changed', 'shortcut-triggered'];
         if (validChannels.includes(channel)) {
-            ipcRenderer.on(channel, (event, ...args) => callback(...args));
+            ipcRenderer.on(channel, (_event, ...args) => callback(...args));
         }
     },
 

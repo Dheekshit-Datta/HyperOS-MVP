@@ -106,7 +106,7 @@ function createWindow(): void {
 
     // Prevent the window from being closed, just hide it
     mainWindow.on('close', (event) => {
-        if (!app.isQuitting) {
+        if (!(app as any).isQuitting) {
             event.preventDefault();
             mainWindow?.hide();
             windowState.isVisible = false;
@@ -171,9 +171,9 @@ function createTray(): void {
     // Create tray icon (use a small icon, 16x16 or 32x32)
     const iconPath = path.join(PUBLIC_PATH, 'icon.png');
 
-    try {
-        // Create a simple icon if file doesn't exist
-        let trayIcon: nativeImage;
+        try {
+            // Create a simple icon if file doesn't exist
+            let trayIcon: ReturnType<typeof nativeImage.createEmpty>;
 
         try {
             trayIcon = nativeImage.createFromPath(iconPath);

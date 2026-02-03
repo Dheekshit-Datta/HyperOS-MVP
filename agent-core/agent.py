@@ -117,8 +117,31 @@ class HyperOSAgent:
             raise ValueError(error_msg)
         
         genai.configure(api_key=gemini_key)
-        self.model = genai.GenerativeModel('gemini-1.5-flash')
-        logger.info("Gemini 1.5 Flash model initialized successfully")
+        # Try different model names for compatibility (with version suffixes)
+        model_names = [
+            'gemini-1.5-flash-002',  # Production-ready version
+            'gemini-1.5-flash',      # Default
+            'gemini-1.5-pro',        # Alternative
+            'gemini-pro'             # Fallback
+        ]
+        self.model = None
+        
+        for model_name in model_names:
+            try:
+                self.model = genai.GenerativeModel(model_name)
+                # Test if model works by checking its name
+                logger.info(f"Successfully initialized model: {model_name}")
+                break
+            except Exception as e:
+                logger.warning(f"Failed to initialize {model_name}: {e}")
+                continue
+        
+        if not self.model:
+            raise ValueError(
+                "Failed to initialize any Gemini model. "
+                "Please check your API key and ensure it has access to Gemini models. "
+                "Get your API key at: https://makersuite.google.com/app/apikey"
+            )
     
     def get_system_status(self) -> Dict[str, Any]:
         """Get current system status information"""
@@ -219,7 +242,9 @@ RULES:
 - If stuck or cannot proceed, set action to "done" with explanation
 """
 
-        prompt = f"""USER TASK: {user_task}
+        prompt = f"""{system_instructions}
+
+USER TASK: {user_task}
 
 PREVIOUS ACTIONS IN THIS SESSION:
 {json.dumps(self.history[-5:], indent=2) if self.history else "None yet"}
@@ -228,11 +253,19 @@ Analyze the attached screenshot and provide the next action as JSON."""
 
         logger.info("Sending request to Gemini AI...")
         
-        response = self.model.generate_content(
-            [prompt, screenshot],
-            generation_config={"response_mime_type": "application/json"},
-            system_instruction=system_instructions
-        )
+        try:
+            # Try with system_instruction parameter (newer API)
+            response = self.model.generate_content(
+                [prompt, screenshot],
+                generation_config={"response_mime_type": "application/json"},
+                system_instruction=system_instructions
+            )
+        except TypeError:
+            # Fallback: system instructions already in prompt
+            response = self.model.generate_content(
+                [prompt, screenshot],
+                generation_config={"response_mime_type": "application/json"}
+            )
         
         content = response.text.strip()
         logger.debug(f"Raw Gemini response: {content[:200]}...")
